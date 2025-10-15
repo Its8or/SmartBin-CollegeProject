@@ -2,9 +2,11 @@
 
 int distance = 0;
 int bottom = 8;
+int contadorSacolas = 0;
+int lastStatus = LOW;
 Servo servo_4;
 
-// button Statuses
+// Button Status
 int button_status = LOW;
 int keep_button_status = LOW;
 
@@ -34,12 +36,19 @@ void setup()
 void loop()
 {
   button_status = digitalRead(bottom);
+  if(lastStatus == HIGH && button_status == LOW){
+    contadorSacolas++;
+    Serial.println(contadorSacolas);
+    delay(50); //debounce
+  }
+  lastStatus = button_status;
+  
   distance = 0.01723 * readUltrasonicDistance(7, 6);
-  Serial.println(distance);
+ // Serial.println(distance);
   
   if (button_status == HIGH) {
     keep_button_status = !keep_button_status;
-    
+    delay(50); //debounce
   }
  
   if(distance <= 100){
