@@ -2,6 +2,8 @@
 
 Este projeto implementa uma lixeira inteligente automatizada que utiliza um sensor ultrassônico para abertura automática e um controle manual com botão para monitorar o descarte de sacolas (ou ciclos de abertura manual) em um display LCD.
 
+* _Versão de controle atual: [v0.5](https://www.tinkercad.com/things/idXBpOgxGqu-v05-microcontroladores-collegeproject?sharecode=YX1g0w7n339c5irUJk7A5dMIvdltABh9mT0SGikLEVY)_
+
 ## 🚀 Funcionalidades
 
 * **Abertura Automática:** O servo motor abre a tampa da lixeira quando um objeto (lixo) é detectado a uma distância inferior a $100 \text{ cm}$. A tampa fecha automaticamente após $3$ segundos.
