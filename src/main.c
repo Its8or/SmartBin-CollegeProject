@@ -20,6 +20,9 @@ Adafruit_LiquidCrystal lcd(0);
 // ========================== Variáveis Globais de Estado ==========================
 // prefixo 'g_' apenas para mostrar se eh variavel global
 
+unsigned long g_previousMillis = 0;
+const long g_interval = 1000; // Intervalo de 1 segundo (1000 ms)
+
 int g_gasLevel = 0;
 // Variável para armazenar sacolas da semana
 int g_contadorSacolas = 0;
@@ -32,9 +35,9 @@ Servo g_servo;
 // ========================== prototipagem de funcoes ==========================
 
 /**
- * @brief Inicializa Leds(sistema e sensor de gas) e Botao.
+ * @brief Inicializa Leds(sistema e sensor de gas), Botao e Buzzer.
  */
-void inicializarPinos();
+void initializePINs();
 
 /**
  * @brief Mede a distância em centímetros usando o sensor ultrassônico.
@@ -52,10 +55,10 @@ long readDistanceCm(int triggerPin, int echoPin);
 void handleButtonPress();
 
 /**
- * @brief Controla os LEDs (Vermelho/Verde) do sistema padrao com base no estado de abertura manual do servo.
+ * @brief Controla os LEDs (Vermelho/Verde) do sistema padrao
+ * com base no estado de abertura manual do servo.
  */
-void controlSystemLED();
-
+void controlMainSystem();
 
 /**
  * @brief Controla a posição do servo com base na distância lida e no estado manual.
@@ -64,24 +67,28 @@ void controlSystemLED();
 void controlServo(long distance);
 
 /**
- * @brief Controla os LEDs (Vermelho/Verde) do sensor de gas com base no estado de abertura manual do servo.
+ * @brief Controla os LEDs (Vermelho/Verde) do sensor de gas
+ * com base no estado de abertura manual do servo
+ * ativa o buzzer quando flag vermelha esta ativada.
  * @param gasFlag valor para poder controlar os lEDs do sensor de gás
  */
-void controlGasLED(int gasFlag);
+void controlGasSystem(int gasFlag);
 
 /**
  * @brief Le sensor de gas e da feedback se ha gases de decomposicao.
  * @param gasLevel valor que informa a distancia do sensor para o gas.
- * @return retorna valores referentes a bandeira de qualidade de ar (1=Verde, 2=Amarelo, 3=Vermelho)
+ * @return retorna valores referentes a bandeira de deteccao de
+ * gases de decomposicao (1=Verde, 2=Amarelo, 3=Vermelho)
  */
-int controlGas(int gasLevel);
+int gasWarningFlag(int gasLevel);
 
 // ========================== SetUp e Loop ==========================
 
 void setup()
 {
-    Serial.begin(9600);     lcd.begin(16, 2);
-    inicializarPinos(); // Inicializa LEDs, Botao
+    Serial.begin(9600);
+    lcd.begin(16, 2);
+    initializePINs(); // Inicializa LEDs, Botao
     lcd.print("Sacolas da ");
     lcd.setCursor(0, 1);
     lcd.print("semana:");
@@ -104,7 +111,7 @@ void loop()
 
     // 3. Lê o Gás
     g_gasLevel = analogRead(A0); // Leitura do sensor de gas
-    int gasFlag = controlGas(g_gasLevel);
+    int gasFlag = gasWarningFlag(g_gasLevel);
 
     // ========================== Debug log ==========================
     Serial.print("Dist: ");
@@ -116,8 +123,8 @@ void loop()
     // =================================================================
 
     // 4. Atualiza os LEDs e o LCD
-    controlGasLED(gasFlag);
-    controlSystemLED();
+    controlMainSystem();
+    controlGasSystem(gasFlag);
 
     lcd.setCursor(8, 1);
     lcd.print(g_contadorSacolas);
@@ -129,11 +136,14 @@ void loop()
 // 					3. DEFINIÇÃO COMPLETA DAS FUNÇÕES
 // -------------------------------------------------------------------
 
-void inicializarPinos()
+void initializePINs()
 {
     // Configurações dos LEDs Sistema
     pinMode(GLED_SYS_PIN, OUTPUT);
     pinMode(RLED_SYS_PIN, OUTPUT);
+
+    // Configurações do Buzzer
+    pinMode(BUZZER_PIN, OUTPUT);
 
     // Configurações dos LEDs Sensor de Gas
     pinMode(GLED_GAS_PIN, OUTPUT);
@@ -221,9 +231,9 @@ void controlServo(long distance)
     }
 }
 
-int controlGas(int gasLevel)
+int gasWarningFlag(int gasLevel)
 {
-    // Bandeiras: 1 = Verde (Bom), 2 = Amarelo (Atenção), 3 = Vermelho (Perigo)
+    // Bandeiras: 1 = Verde (Bom), 2 = Amarelo (Comeco de decomposicao), 3 = Vermelho (Troque a Sacola AGORA)
 
     // Perigo (Vermelho) - Se a leitura for alta
     if (gasLevel >= 30) // 30 ou mais
@@ -243,29 +253,37 @@ int controlGas(int gasLevel)
     }
 }
 
-void controlGasLED(int gasFlag)
+void controlGasSystem(int gasFlag)
 {
-    // Bandeira Vermelha (Perigo)
-    if (gasFlag == 3) {
+    // Bandeira Vermelha
+    // (Lixo deve ser trocado AGORA)
+    if (gasFlag == 3)
+    {
         // Vermelho LIGADO, Verde DESLIGADO
         digitalWrite(GLED_GAS_PIN, LOW);
         digitalWrite(RLED_GAS_PIN, HIGH);
+        tone(BUZZER_PIN, 300, 5000); // play 300Hz for 5 seconds
     }
-    // Bandeira Amarela (Atenção)
-    else if (gasFlag == 2) {
+    // Bandeira Amarela
+    // (Lixo comecando a se decompor, troque a sacola...)
+    else if (gasFlag == 2)
+    {
         // Amarelo (Vermelho + Verde LIGADOS)
         digitalWrite(GLED_GAS_PIN, HIGH);
         digitalWrite(RLED_GAS_PIN, HIGH);
+        tone(BUZZER_PIN, 100, 2000); //  play 300Hz for 2 seconds
     }
     // Bandeira Verde (Bom)
-    else { // gasFlag deve ser 1
+    else
+    { // gasFlag deve ser 1
         // Verde LIGADO, Vermelho DESLIGADO
         digitalWrite(GLED_GAS_PIN, HIGH);
         digitalWrite(RLED_GAS_PIN, LOW);
+        noTone(BUZZER_PIN);
     }
 }
 
-void controlSystemLED()
+void controlMainSystem()
 {
     // LED Vermelho LIGADO e Verde DESLIGADO quando está em modo manual/ativado
     if (g_servoManuallyOpen)
