@@ -4,7 +4,7 @@ Este projeto implementa uma lixeira inteligente automatizada que utiliza um sens
 
 _Atualização: **A nova versão v0.5.5 inclui um sensor de gás para monitorar a qualidade do ar interno da lixeira.**_
 
-* _Versão atual: [v0.5.5](https://www.tinkercad.com/things/idXBpOgxGqu-v05-microcontroladores-collegeproject?sharecode=YX1g0w7n339c5irUJk7A5dMIvdltABh9mT0SGikLEVY)_
+* _Versão atual: [v0.6](https://www.tinkercad.com/things/idXBpOgxGqu-v05-microcontroladores-collegeproject?sharecode=YX1g0w7n339c5irUJk7A5dMIvdltABh9mT0SGikLEVY)_
 
 ## 🚀 Funcionalidades
 
@@ -26,19 +26,17 @@ _Atualização: **A nova versão v0.5.5 inclui um sensor de gás para monitorar 
 
 | Componente | Quantidade | Função |
 | :--- | :--- | :--- |
-| Arduino (Uno, Nano, etc.) | 1 | Microcontrolador principal. |
-| Servo Motor (e.g., SG90) | 1 | Controla a abertura/fechamento da tampa. |
+| Arduino Uno | 1 | Microcontrolador principal. |
+| Servo Motor (SG90) | 1 | Controla a abertura/fechamento da tampa. |
 | Sensor Ultrassônico (HC-SR04) | 1 | Mede a distância para detecção automática. |
-| **Sensor de Gás (Analógico)** | **1** | **Mede a concentração de gases (e.g., MQ-2, MQ-3).** |
+| **Sensor de Gás (MQ135)** | **1** | **Mede a concentração de gases.** |
 | Display LCD (16x2) | 1 | Exibe o contador de sacolas e status. |
 | Botão Push-Button | 1 | Para controle manual e contagem. |
-| LED Vermelho (Sistema) | 1 | Indica modo manual. |
-| LED Verde (Sistema) | 1 | Indica modo automático. |
-| **LED Vermelho (Gás)** | **1** | **Indica perigo de gás.** |
-| **LED Verde (Gás)** | **1** | **Indica ar limpo/bom nível de gás.** |
+| LED RGB (Sistema) | 1 | Indica modo manual ou automático do Sistema. |
+| **LED RGB (Gás)** | **1** | **Indica decomposição de resíduos (verde = não há; amarelo = início de decomposição; vermelho = há decomposição, troque a sacola.)** |
 | **Buzzer Piezo** | **1** | **Para alertas sonoros.** |
-| Resistores | Vários | Para os LEDs e, se necessário, o sensor de gás. |
-| Jumpers (Fios) | Vários | Conexões entre os componentes. |
+| Resistores | 10 | Para os LEDs e, se necessário, o sensor de gás. |
+| Jumpers (Fios) | ~20 | Conexões entre os componentes. |
 
 ## 📌 Esquema de Conexão (Pinagem)
 
@@ -74,9 +72,8 @@ página 2:
 
 Certifique-se de que as seguintes bibliotecas estão instaladas no seu IDE do Arduino:
 
-1.  **`Servo.h`**: (pré-instalada no IDE do Arduino)
-2.  **`Adafruit_LiquidCrystal.h`**: (Instalar via Gerenciador de Bibliotecas. O construtor `lcd(0)` é usado, que é comum para displays conectados diretamente ou com certas configurações de barramento.)
-
+1.  **`Servo.h`**: Responsável pelo controle do _*Servo Motor*_
+2.  **`Adafruit_LiquidCrystal.h`**: Resposável pelo controle da _*tela LCD*_
 ## 💻 Detalhes do Código
 
 O código está estruturado com as seguintes funções principais:
