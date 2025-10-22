@@ -4,7 +4,7 @@ Este projeto implementa uma lixeira inteligente automatizada que utiliza um sens
 
 _Atualização: **A nova versão v0.5.5 inclui um sensor de gás para monitorar a qualidade do ar interno da lixeira.**_
 
-* _Versão atual: [v0.6](https://www.tinkercad.com/things/idXBpOgxGqu-v05-microcontroladores-collegeproject?sharecode=YX1g0w7n339c5irUJk7A5dMIvdltABh9mT0SGikLEVY)_
+* _Versão atual: [v0.6](https://www.tinkercad.com/things/idXBpOgxGqu-v06-microcontroladores-collegeproject?sharecode=YX1g0w7n339c5irUJk7A5dMIvdltABh9mT0SGikLEVY)_
 
 ## 🚀 Funcionalidades
 
