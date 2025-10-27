@@ -89,9 +89,6 @@ void setup()
     Serial.begin(9600);
     lcd.begin(16, 2);
     initializePINs(); // Inicializa LEDs, Botao
-    lcd.print("Sacolas da ");
-    lcd.setCursor(0, 1);
-    lcd.print("semana:");
 
     // Inicializa o Servo
     g_servo.attach(SERVO_PIN);
@@ -126,10 +123,29 @@ void loop()
     controlMainSystem();
     controlGasSystem(gasFlag);
 
-    lcd.setCursor(8, 1);
-    lcd.print(g_contadorSacolas);
+    
+    if (gasFlag != 3)
+    {
+        // LCD MENSAGEM NORMAL
+        lcd.clear();
+        lcd.print("Sacolas da ");
+        lcd.setCursor(0, 1);
+        lcd.print("semana:");
 
-    delay(100); // Adiciona um pequeno delay no loop para facilitar a leitura serial
+        lcd.setCursor(8, 1);
+        lcd.print(g_contadorSacolas);
+    }
+    else
+    {
+        // LCD MENSAGEM PARA TROCAR A SACOLA 
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("TROQUE O SACOLA");
+        lcd.setCursor(0, 1);
+        lcd.print("AGORA!");
+    }
+
+    delay(10); // Adiciona um pequeno delay no loop para facilitar a leitura serial
 }
 
 // -------------------------------------------------------------------
