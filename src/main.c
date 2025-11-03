@@ -1,5 +1,4 @@
 #include <Servo.h>
-#include <Adafruit_LiquidCrystal.h>
 
 // ========================== Definições Globais e Pinos ==========================
 
@@ -15,10 +14,8 @@ const int BUTTON_PIN = 8;    // Pino 8 (usando INPUT_PULLUP)
 const int RLED_GAS_PIN = 9;  // LED Vermelho (sensor de gas)
 const int GLED_GAS_PIN = 10; // LED Verde (sensor de gas)
 
-Adafruit_LiquidCrystal lcd(0);
+// ================== Variáveis Globais de Estado (prefixo 'g_') ===================
 
-// ========================== Variáveis Globais de Estado ==========================
-// prefixo 'g_' apenas para mostrar se eh variavel global
 
 unsigned long g_previousMillis = 0;
 const long g_interval = 1000; // Intervalo de 1 segundo (1000 ms)
@@ -87,7 +84,6 @@ int gasWarningFlag(int gasLevel);
 void setup()
 {
     Serial.begin(9600);
-    lcd.begin(16, 2);
     initializePINs(); // Inicializa LEDs, Botao
 
     // Inicializa o Servo
@@ -127,22 +123,15 @@ void loop()
     if (gasFlag != 3)
     {
         // LCD MENSAGEM NORMAL
-        lcd.clear();
-        lcd.print("Sacolas da ");
-        lcd.setCursor(0, 1);
-        lcd.print("semana:");
-
-        lcd.setCursor(8, 1);
-        lcd.print(g_contadorSacolas);
+        Serial.print("Sacolas da ");
+        Serial.print("semana:");
+        Serial.print(g_contadorSacolas);
     }
     else
     {
         // LCD MENSAGEM PARA TROCAR A SACOLA 
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("TROQUE O SACOLA");
-        lcd.setCursor(0, 1);
-        lcd.print("AGORA!");
+        Serial.print("TROQUE O SACOLA");
+        Serial.print("AGORA!");
     }
 
     delay(10); // Adiciona um pequeno delay no loop para facilitar a leitura serial
