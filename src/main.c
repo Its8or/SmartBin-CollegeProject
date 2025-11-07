@@ -6,13 +6,13 @@ const int SENSORGAS_PIN = A0; // recebe analog sinal do sensor de gas
 
 const int RLED_SYS_PIN = 2;  // LED Vermelho do sistema da lixeira
 const int GLED_SYS_PIN = 3;  // LED Verde do sistema da lixeira
-const int SERVO_PIN = 4;     // controle Motor Servo
-const int BUZZER_PIN = 5;    // controla o Buzzer Piezo
-const int ECHO_PIN = 6;      // Conecta Sersor ultrassônico; Recebe som
-const int TRIGGER_PIN = 7;   // Conecta Sersor ultrassônico; Emite som
-const int BUTTON_PIN = 8;    // Pino 8 (usando INPUT_PULLUP)
-const int RLED_GAS_PIN = 9;  // LED Vermelho (sensor de gas)
-const int GLED_GAS_PIN = 10; // LED Verde (sensor de gas)
+const int SERVO_PIN = 6;     // controle Motor Servo
+const int BUZZER_PIN = ;    // controla o Buzzer Piezo
+const int ECHO_PIN = 10;      // Conecta Sersor ultrassônico; Recebe som
+const int TRIGGER_PIN = 9;   // Conecta Sersor ultrassônico; Emite som
+const int BUTTON_PIN = ;    // Pino 8 (usando INPUT_PULLUP)
+const int RLED_GAS_PIN = 4;  // LED Vermelho (sensor de gas)
+const int GLED_GAS_PIN = 5; // LED Verde (sensor de gas)
 
 // ================== Variáveis Globais de Estado (prefixo 'g_') ===================
 
